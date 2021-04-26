@@ -1,7 +1,23 @@
+import re
+
+def getRawString(text):
+    strRaw = repr(text)
+    strRaw2 = ''
+    for i in range (1, len(strRaw)-1,1):
+        strRaw2 = strRaw2 + strRaw[i]
+    return strRaw2
+
 def findLastOccurence(pattern, x):
     n = len(pattern)
     for i in range (n-1,-1,-1):
-        if (pattern[i] == x):
+        # Apply regex
+        textSource = pattern[i]
+        search = getRawString(x)
+        pattern1 = re.compile(search, re.IGNORECASE)
+        match = pattern1.findall(textSource)
+        
+        # IF pattern[i]==x
+        if (match):
             return i
     return -1
     
@@ -19,7 +35,14 @@ def bmMatch (text, pattern):
         return -1
     
     while (i <= nText-1):
-        if (pattern[j] == text[i]):
+        # Apply regex
+        textSource = pattern[j]
+        search = getRawString(text[i])
+        pattern1 = re.compile(search, re.IGNORECASE)
+        match = pattern1.findall(textSource)
+
+        # IF pattern[j] == text[i]
+        if (match):
             if (j==0):
                 return i # match
             else:
@@ -36,5 +59,8 @@ def bmMatch (text, pattern):
 
 text = "abacaabadcabacabaabb"
 pattern = "abacab"
+text1 = "aaaatUbESaaaa"
+pattern1 = "tubes"
 idx = bmMatch(text,pattern)
 print(idx)
+print(bmMatch(text1,pattern1))
