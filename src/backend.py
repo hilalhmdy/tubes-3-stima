@@ -129,6 +129,7 @@ def addReminer(input):
     dbReminder.append([id,TanggalReminder, NamaMatkul, tipeReminder, namaTopik, statusTask])
     print("[TASK BERHASIL DICATAT]")
     print("(ID:{0}) {1}-{2}-{3}-{4}".format(id,TanggalReminder,NamaMatkul,tipeReminder,namaTopik))
+    return ("[TASK BERHASIL DICATAT]\n(ID:{0}) {1}-{2}-{3}-{4}".format(id,TanggalReminder,NamaMatkul,tipeReminder,namaTopik))
 
 # Fungsi 2
 # Menampilkan seluruh task
@@ -551,47 +552,50 @@ def markTask(inputText):
             return ("Task {0} tidak ditemukan untuk diperabarui statusnya".format(NamaID))
 
 
+def balasan(input):
+    print(input)
+    return (addReminer(input))
 
-# file1 = open("KataPenting.txt","r+")
-# KataPenting = file1.read().splitlines()
-# file1.close()
-KataPenting =  readFileTXT("KataPenting.txt")
-print(KataPenting)
-dbReminder.append([1,"13/03/2021","IF2210","Tubes","Tugas2an",0])
-contohinput = "Tubes IF2211 String Matching pada 14/02/2021"
+# # file1 = open("KataPenting.txt","r+")
+# # KataPenting = file1.read().splitlines()
+# # file1.close()
+# KataPenting =  readFileTXT("KataPenting.txt")
+# print(KataPenting)
+# dbReminder.append([1,"13/03/2021","IF2210","Tubes","Tugas2an",0])
+# contohinput = "Tubes IF2211 String Matching pada 14/02/2021"
 
-# Fungsi 1 - add reminder
-addReminer(contohinput)
-print(dbReminder)
+# # Fungsi 1 - add reminder
+# addReminer(contohinput)
+# print(dbReminder)
 
-print("Fungsi 2-Show all task")
-resultAll = showAllTask()
-print(resultAll)
+# print("Fungsi 2-Show all task")
+# resultAll = showAllTask()
+# print(resultAll)
 
-print("Apa saja deadline yang dimiliki sejauh ini")
-resultPT = periodeTask("Apa saja deadline yang dimiliki sejauh ini")
-print(resultPT)
+# print("Apa saja deadline yang dimiliki sejauh ini")
+# resultPT = periodeTask("Apa saja deadline yang dimiliki sejauh ini")
+# print(resultPT)
 
-print("3 minggu ke depan ada kuis apa saja")
-resultPTType = periodeTaskWithTaskType ("3 minggu ke depan ada kuis apa saja")
-# print(resultPTType)
-# print(datetime.datetime.now().year )
-# print(textToAngka("tiga"))
+# print("3 minggu ke depan ada kuis apa saja")
+# resultPTType = periodeTaskWithTaskType ("3 minggu ke depan ada kuis apa saja")
+# # print(resultPTType)
+# # print(datetime.datetime.now().year )
+# # print(textToAngka("tiga"))
 
-print("Show deadlines")
-resultSD = showTaskDeadlines("Deadline tugas IF2211 itu kapan")
-print(resultSD)
+# print("Show deadlines")
+# resultSD = showTaskDeadlines("Deadline tugas IF2211 itu kapan")
+# print(resultSD)
 
-print("RENEW DEadline")
-resultRD = renewDeadline("Deadline task 1 diundur menjadi 28/04/2021")
-print(resultRD)
-print(dbReminder)
+# print("RENEW DEadline")
+# resultRD = renewDeadline("Deadline task 1 diundur menjadi 28/04/2021")
+# print(resultRD)
+# print(dbReminder)
 
-print("Markselesai")
-resultMS = markTask("Saya sudah selesai mengerjakan task 1")
-print(resultMS)
+# print("Markselesai")
+# resultMS = markTask("Saya sudah selesai mengerjakan task 1")
+# print(resultMS)
 
-print(dbReminder)
+# print(dbReminder)
 
 # print(normalizeDatePattern("14 April 2021"))
 # print(findQueueMonth("april"))
