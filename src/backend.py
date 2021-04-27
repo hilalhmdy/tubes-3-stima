@@ -54,7 +54,7 @@ def readFileTXT(sourceFile):
     return listOfRows
 
 def writeListToTXT(inputList, sourceFile):
-    file1 = open(sourceFile,"w+")
+    file1 = open(sourceFile,"w")
     for input in inputList:
         # print(input)
         file1.write(input)
@@ -165,7 +165,7 @@ def resultToString(result):
     else:
         string = "[Daftar Deadline]"
         for i in range (len(result)):
-            string += ("</span></p><p class=\"botText\"><span>{0}. ({1}) {2}-{3}-{4}-{5}".format(i+1,result[i][0],result[i][1],result[i][2],result[i][3],result[i][4]))
+            string += ("</span></p><p class=\"botText\"><span>{0}. (ID:{1}) {2}-{3}-{4}-{5}".format(i+1,result[i][0],result[i][1],result[i][2],result[i][3],result[i][4]))
         return string
 
 # Fungsi 1 (Menambahkan task ke reminder)
@@ -188,6 +188,10 @@ def addReminder(input):
     matchTopik = findTopic(input)
     namaTopik = matchTopik[0]
     print("Nama Topik : " + namaTopik)
+    # Check if task already exists
+    for i in range (len(dbReminder)):
+        if (dbReminder[i][1]==TanggalReminder and dbReminder[i][2]==NamaMatkul and dbReminder[i][3] == tipeReminder and dbReminder[i][4]==namaTopik):
+            return ("Task yang coba dimasukan sudah ada di dalam database")
     # Add it to list of db
     id = len(dbReminder)+1
     statusTask = 0
@@ -509,7 +513,7 @@ def showTaskDeadlines(inputText):
     for i in range (len(dbReminder)):
         if (boyermoore.bmMatch(dbReminder[i][2],NamaMatkul)!=-1):
             result.append(dbReminder[i])
-    return result
+    return resultToString(result)
 
 # fungsi 4
 def renewDeadline(inputText):
@@ -535,7 +539,7 @@ def renewDeadline(inputText):
     if (operationValidity):
         return ("Deadline task {0} telah diperbarui".format(NamaID))
     else :
-        return ("Task {0} tidak ditemukan untuk diperabarui jadwalnya".format(NamaID))
+        return ("Task {0} tidak ditemukan untuk diperbarui jadwalnya".format(NamaID))
 
 # fungsi 5
 def markTask(inputText):
@@ -627,24 +631,26 @@ print(dbReminder)
 
 # # Fungsi 1 - add reminder
 # print("\nFungsi 1 - add reminder")
-# addReminder(contohinput)
+# # addReminer(contohinput)
 # print(dbReminder)
 
-# Fungsi 2
-print("\nFungsi 2-Show all task")
-print(dbReminder)
-resultAll = showAllTask()
-print(resultAll)
+# # Fungsi 2
+# print("\nFungsi 2-Show all task")
+# print(dbReminder)
+# resultAll = showAllTask()
+# print(resultAll)
 
-print("\nApa saja deadline antara 10/02/2021 sampai 10/04/2021")
-resultPT = periodeTask("Apa saja deadline antara 10/02/2021 sampai 10/04/2021")
-print(resultPT)
+# print("\nApa saja deadline antara 10/02/2021 sampai 10/04/2021")
+# resultAntara = periodeTask("Apa saja deadline antara 10/02/2021 sampai 10/04/2021")
+# print(resultAntara)
 
-# print("3 minggu ke depan ada kuis apa saja")
-# resultPTType = periodeTaskWithTaskType ("3 minggu ke depan ada kuis apa saja")
-# # print(resultPTType)
-# # print(datetime.datetime.now().year )
-# # print(textToAngka("tiga"))
+# print("\n3 minggu ke depan ada kuis apa saja")
+# resultMinggu = periodeTaskWithTaskType ("3 minggu ke depan ada tubes apa saja")
+# print(resultMinggu)
+
+# print("\n3 hari ke depan ada kuis apa saja")
+# resultHari = periodeTaskWithTaskType ("3 hari ke depan ada tubes apa saja")
+# print(resultHari)
 
 # print("determinae fungsi 2")
 # resultt = showListOfTask("Apa saja deadline yang dimiliki sejauh ini")
