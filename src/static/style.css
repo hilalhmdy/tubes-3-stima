@@ -4,18 +4,32 @@ body {
 
 }
 
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
 .header {
     top: 0px;
+    left: 0px;
     width: 100%;
     position: fixed;
     padding: 10px;
-    background-color: rgb(255, 179, 179);
+    background-color: rgb(255, 218, 218);
     z-index: 1;
 }
 
 h1 {
 
-    color: black;
+    color:#EF5350;
 
     margin-bottom: 0;
 
@@ -29,7 +43,7 @@ h1 {
 
 h3 {
 
-    color: black;
+    color:#EF5350;
 
     font-size: 20px;
 
@@ -47,9 +61,11 @@ h3 {
 
     width: 40%;
 
-    margin-top: 150px;
+    margin-top: 120px;
 
-    margin-bottom: 70px;
+    margin-bottom: 90px;
+
+    background-color: white;
 
 }
 
@@ -66,8 +82,9 @@ h3 {
     margin-top: 60px;
 
     bottom: 0px;
-    padding: 10px 460px 20px 460px;
-    background-color: rgb(255, 179, 179);
+    left: 0px;
+    padding: 10px 475px 20px 475px;
+    background-color: rgb(255, 218, 218);
 
 }
 
@@ -77,22 +94,33 @@ h3 {
 
     border: none;
 
-    border-bottom: 3px solid #009688;
+    border-bottom: 3px solid #EF5350;
 
     font-family: monospace;
 
     font-size: 17px;
+
+    background-color: rgb(255, 218, 218);
 
 }
 
+#textInput:focus {
+    color:#EF5350;
+    outline: none;
+}
+
 #buttonInput {
+    content: url("sendwhite.png");
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+}
 
-    padding: 3px;
-
-    font-family: monospace;
-
-    font-size: 17px;
-
+#buttonInput:hover {
+    content: url("send.png");
+    padding: 5px;
+    width: 20px;
+    height: 20px;
 }
 
 .userText {
