@@ -1,8 +1,7 @@
-Apa saja
-Deadline
-Kapan
-Diundur
-Selesai
-Bantuan
-Help
-Apa yang bisa assistant lakukan
+Apa saja --> f2
+Kapan --> f3
+Diundur --> f4
+Selesai --> f5
+Bantuan --> f6
+Help --> f6
+Apa yang bisa assistant lakukan --> f6
