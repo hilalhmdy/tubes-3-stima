@@ -16,6 +16,7 @@
       <div id="chatbox">
         <p class="botText"><span>Hi! Chatan YUK!.</span></p>
       </div>
+      <div id="autoscroll"></div>
       <div id="userInput">
         <input id="textInput" type="text" name="msg" placeholder="Enter a Message">
         <input id="buttonInput" type="submit" value="Send">
@@ -26,7 +27,7 @@
           var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
           $("#textInput").val("");
           $("#chatbox").append(userHtml);
-          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          document.getElementById('autoscroll').scrollIntoView({block: 'start', behavior: 'smooth'});
 
           $.get("/get", { msg: rawText }).done(function(data) {
 
@@ -34,7 +35,7 @@
 
             $("#chatbox").append(botHtml);
 
-            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+            document.getElementById('autoscroll').scrollIntoView({block: 'start', behavior: 'smooth'});
           });
         }
         $("#textInput").keypress(function(e) {
