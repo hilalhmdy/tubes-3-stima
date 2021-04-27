@@ -15,7 +15,7 @@
     </div>
     <div class="container">
       <div id="chatbox">
-        <p class="botText"><span>Hi! Chatan YUK!.</span></p>
+        <p class="botText"><span>Hi! Chatan YUK!.</span><b id="first"></b></p>
       </div>
       <div id="autoscroll"></div>
       <div id="userInput">
@@ -25,14 +25,14 @@
       <script>
         function getBotResponse() {
           var rawText = $("#textInput").val();
-          var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+          var userHtml = '<p class="userText"><b>'+getTime()+'</b><span>' + rawText + '</span></p>';
           $("#textInput").val("");
           $("#chatbox").append(userHtml);
           document.getElementById('autoscroll').scrollIntoView({block: 'start', behavior: 'smooth'});
 
           $.get("/get", { msg: rawText }).done(function(data) {
 
-            var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+            var botHtml = '<p class="botText"><span>' + data + '</span><b>'+getTime()+'</b>';
 
             $("#chatbox").append(botHtml);
 
@@ -55,6 +55,19 @@
             }
 
         })
+        document.getElementById("first").value = getTime();
+        function getTime() {
+          var today = new Date();
+          var h = today.getHours();
+          var m = today.getMinutes();
+          h = checkTime(h);
+          m = checkTime(m);
+          return (h + ":" + m);
+        }
+        function checkTime(i) {
+          if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        }
       </script>
     </div>
   </body>

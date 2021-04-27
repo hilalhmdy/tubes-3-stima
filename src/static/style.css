@@ -152,6 +152,16 @@ h3 {
 
 }
 
+.botText b {
+    padding: 5px;
+    color:#EF5350;
+}
+
+.userText b {
+    padding: 5px;
+    color:#009688;
+}
+
 #tidbit {
 
     position:absolute;
