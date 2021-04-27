@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from os import path
-from backend import balasan
+from backend import main
 
 app = Flask(__name__)
 
@@ -15,7 +15,7 @@ def get_bot_response():
 
     userText = request.args.get('msg')
 
-    return balasan(userText)
+    return main(userText)
 
 if __name__ == "__main__":
     app.run(debug = True)

@@ -159,8 +159,17 @@ def findTopic(inputText):
     matchTopic = patternTopic.findall(inputText)
     return matchTopic
 
+def resultToString(result):
+    if len(result) == 0:
+        return "Tidak Ada"
+    else:
+        string = "[Daftar Deadline]"
+        for i in range (len(result)):
+            string += ("</span></p><p class=\"botText\"><span>{0}. ({1}) {2}-{3}-{4}-{5}".format(i+1,result[i][0],result[i][1],result[i][2],result[i][3],result[i][4]))
+        return string
+
 # Fungsi 1 (Menambahkan task ke reminder)
-def addReminer(input):
+def addReminder(input):
     global dbReminder
     # Jenis reminder
     tipeReminder = findTipeReminder(input)
@@ -186,7 +195,7 @@ def addReminer(input):
     # print("[TASK BERHASIL DICATAT]")
     # print("(ID:{0}) {1}-{2}-{3}-{4}".format(id,TanggalReminder,NamaMatkul,tipeReminder,namaTopik))
     writeDatabase(namaDatabase)
-    return ("[TASK BERHASIL DICATAT]\n(ID:{0}) {1}-{2}-{3}-{4}".format(id,TanggalReminder,NamaMatkul,tipeReminder,namaTopik))
+    return ("[TASK BERHASIL DICATAT]</span></p><p class=\"botText\"><span>(ID:{0}) {1}-{2}-{3}-{4}".format(id,TanggalReminder,NamaMatkul,tipeReminder,namaTopik))
 
 # Fungsi 2
 # Menampilkan seluruh task
@@ -199,7 +208,7 @@ def showAllTask():
         if (dbReminder[i][5]==0):
             currentID = "ID:" + str(dbReminder[i][0])
             result.append([currentID, dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]])
-    return result
+    return resultToString(result)
 
 # Berdasarkan periode waktu
 def periodeTask(inputText):
@@ -236,7 +245,7 @@ def periodeTask(inputText):
             if ((dt1 < currentdt and currentdt < dt2) and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 2):
         # -------------N minggu ke depan-------------#
         # findN = boyermoore.bmMatch(inputText,periodeWaktu[2])
@@ -272,7 +281,7 @@ def periodeTask(inputText):
             if ((dt1 < currentdt and currentdt < dt2) and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 3):
         # -------------N hari ke depan-------------#
         textSource = inputText
@@ -306,7 +315,7 @@ def periodeTask(inputText):
             if ((dt1 < currentdt and currentdt < dt2) and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 4):
         # --------Hari ini--------
         nowDate = datetime.datetime.now()
@@ -324,7 +333,7 @@ def periodeTask(inputText):
             if (dt1 == currentdt and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 5):
         # ------------Seluruh task yang sudah tercatat oleh assistant------------
         return showAllTask()
@@ -338,7 +347,7 @@ def showAllTaskWithType(tipeTask):
         if (dbReminder[i][5]==0 and tipeTask==dbReminder[i][3]):
             currentID = "ID:" + str(dbReminder[i][0])
             result.append([currentID, dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]])
-    return result
+    return resultToString(result)
 
 def periodeTaskWithTaskType(inputText):
     global dbReminder
@@ -380,7 +389,7 @@ def periodeTaskWithTaskType(inputText):
             if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3] and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 2):
         # -------------N minggu ke depan-------------#
         # findN = boyermoore.bmMatch(inputText,periodeWaktu[2])
@@ -415,7 +424,7 @@ def periodeTaskWithTaskType(inputText):
             if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3] and dbReminder[i][5]==0):
                 # print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 3):
         textSource = inputText
         patternN = re.compile(r'(\w+)\shari ke depan',re.IGNORECASE)
@@ -448,7 +457,7 @@ def periodeTaskWithTaskType(inputText):
             if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3] and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 4):
         # ---------Hari ini-----------
         nowDate = datetime.datetime.now()
@@ -466,7 +475,7 @@ def periodeTaskWithTaskType(inputText):
             if ((dt1 == currentdt) and tipeTask == dbReminder[i][3] and dbReminder[i][5]==0):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
-        return result
+        return resultToString(result)
     elif (idxTipePeriode == 5):
         return showAllTaskWithType(tipeTask)
 
@@ -563,7 +572,7 @@ def main(inputText):
     typeTask = findTipeReminder(inputText)
     topic = findTopic(inputText)
     if (date and NamaMatkul and topic and typeTask):
-        command[0] == True
+        command[0] = True
         print("Memenuhi add")
     else :
         print("Tidak memenuhi")
@@ -595,7 +604,7 @@ def main(inputText):
         return ("Masukan Salah")
     else:
         if (command[0] == True):
-            return(addReminer(inputText))
+            return(addReminder(inputText))
         elif (command[1] == True):
             return(showListOfTask(inputText))
         elif (command[2] == True):
@@ -618,7 +627,7 @@ print(dbReminder)
 
 # # Fungsi 1 - add reminder
 # print("\nFungsi 1 - add reminder")
-# addReminer(contohinput)
+# addReminder(contohinput)
 # print(dbReminder)
 
 # Fungsi 2
