@@ -8,7 +8,8 @@ KataPenting = []
 dbReminder = []
 listAngka = ["Nol","Satu","Dua","Tiga","Empat","Lima","Enam","Tujuh","Delapan","Sembilan"]
 listBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
-periodeWaktu = ["antara", "sampai", "minggu ke depan","hari ke depan","hari ini"]
+periodeWaktu = ["antara", "sampai", "minggu ke depan","hari ke depan","hari ini","sejauh ini"]
+keyword = ["Apa saja","Deadline","Kapan","Diundur","Selesai","Bantuan","Help","Apa yang bisa assistant lakukan"]
 
 def findQueueMonth(bulan):
     n = len(listBulan)
@@ -72,6 +73,29 @@ def normalizeDatePattern(tanggal):
         return resultTanggal
     return tanggal
 
+def isNumber(input):
+    patternInput = re.compile(r'[0-9]+')
+    matchInput = patternInput.findall(input)
+    # print(matchInput)
+    if (matchInput):
+        return True
+    else:
+        return False
+
+def findPeriodeWaktu(inputText):
+    tipeperiode = ''
+    idxTipePeriode = -1
+    isFound = False
+    for periode in periodeWaktu:
+        idxTipePeriode +=1
+        if (boyermoore.bmMatch(inputText,periode) != -1):
+            tipeperiode = periode
+            isFound = True
+            break
+    if (isFound == False):
+        idxTipePeriode += 1
+    # print(tipeperiode,idxTipePeriode)
+    return tipeperiode,idxTipePeriode
 
 # Fungsi 1 (Menambahkan task ke reminder)
 def addReminer(input):
@@ -116,23 +140,17 @@ def showAllTask():
     for i in range (n):
         if (dbReminder[i][5]==0):
             currentID = "ID:" + str(dbReminder[i][0])
-            # print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
             result.append([currentID, dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]])
     return result
+
+
 
 # Berdasarkan periode waktu
 def periodeTask(inputText):
     global dbReminder
-    # Jenis periode
-    tipeperiode = ''
-    idxTipePeriode = -1
-    for periode in periodeWaktu:
-        idxTipePeriode +=1
-        if (boyermoore.bmMatch(inputText,periode) != -1):
-            tipeperiode = periode
-            break
-    print(tipeperiode,idxTipePeriode)
     # menentukan jenis periode
+    tipeperiode, idxTipePeriode = findPeriodeWaktu(inputText)
+    print(tipeperiode,idxTipePeriode)
     if (idxTipePeriode == 0 or idxTipePeriode == 1):
         print("antara-sampai")
         # Mendapatkan 2 Tanggal
@@ -172,7 +190,7 @@ def periodeTask(inputText):
         patternN = re.compile(r'(\w+)\sminggu ke depan',re.IGNORECASE)
         matchN = patternN.findall(textSource)
         print(matchN)
-        if (isinstance(int(matchN[0]),(int,float))):
+        if (isNumber(matchN[0])):
             nHari = int(matchN[0])*7
             nowDate = datetime.datetime.now()
             nowDateGap = nowDate + timedelta(days=nHari)
@@ -223,7 +241,7 @@ def periodeTask(inputText):
         patternN = re.compile(r'(\w+)\shari ke depan',re.IGNORECASE)
         matchN = patternN.findall(textSource)
         print(matchN)
-        if (isinstance(int(matchN[0]),(int,float))):
+        if (isNumber(matchN[0])):
             nHari = int(matchN[0])
             nowDate = datetime.datetime.now()
             nowDateGap = nowDate + timedelta(days=nHari)
@@ -286,10 +304,190 @@ def periodeTask(inputText):
                 print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
                 result.append(dbReminder[i])
         return result
+    elif (idxTipePeriode == 5):
+        return showAllTask()
+
+def showAllTaskWithType(tipeTask):
+    global dbReminder
+    n = len(dbReminder)
+    result = []
+    # print("[Daftar Deadline]")
+    for i in range (n):
+        if (dbReminder[i][5]==0 and tipeTask==dbReminder[i][3]):
+            currentID = "ID:" + str(dbReminder[i][0])
+            result.append([currentID, dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]])
+    return result
+
+def periodeTaskWithTaskType(inputText):
+    global dbReminder
+    # Menentukan Type Task
+    tipeTask = ''
+    for kata in KataPenting:
+        if (boyermoore.bmMatch(inputText,kata) != -1):
+            tipeTask = kata
+    print(tipeTask)
+    # menentukan jenis periode
+    tipeperiode, idxTipePeriode = findPeriodeWaktu(inputText)
+    print(tipeperiode,idxTipePeriode)
+    if (idxTipePeriode == 0 or idxTipePeriode == 1):
+        print("antara-sampai")
+        # Mendapatkan 2 Tanggal
+        # Format tanggal : 14/02/2021 ATAU 14-02-2021 ATAU 14 April 2021
+        textSource = inputText
+        patternTanggal = re.compile(r'[0-9]{2}[/-]?\s?\w+[/-]?\s?[0-9]{4}')
+        matchTanggal = patternTanggal.findall(textSource)
+        normalPatternTanggal = []
+        for i in range (len(matchTanggal)):
+            normalPatternTanggal.append(normalizeDatePattern(matchTanggal[i]))
+        # print(matchTanggal)
+        # print(normalPatternTanggal)
+        # date in yyyy/mm/dd format
+        y1 = int(normalPatternTanggal[0][6:10])
+        m1 = int(normalPatternTanggal[0][3:5])
+        d1 = int(normalPatternTanggal[0][0:2])
+        y2 = int(normalPatternTanggal[1][6:10])
+        m2 = int(normalPatternTanggal[1][3:5])
+        d2 = int(normalPatternTanggal[1][0:2])
+        dt1 = datetime.datetime(y1,m1,d1)
+        dt2 = datetime.datetime(y2,m2,d2)
+        n = len(dbReminder)
+        result=[]
+        for i in range (n):
+            currentYear = int(dbReminder[i][1][6:10])
+            currentMonth = int(dbReminder[i][1][3:5])
+            currentDay = int(dbReminder[i][1][0:2])
+            currentdt = datetime.datetime(currentYear, currentMonth, currentDay)
+            if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3]):
+                print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
+                result.append(dbReminder[i])
+        return result
+    elif (idxTipePeriode == 2):
+        # findN = boyermoore.bmMatch(inputText,periodeWaktu[2])
+        # print(findN)
+        textSource = inputText
+        patternN = re.compile(r'(\w+)\sminggu ke depan',re.IGNORECASE)
+        matchN = patternN.findall(textSource)
+        # print(matchN)
+        if (isNumber(matchN[0])):
+            nHari = int(matchN[0])*7
+            nowDate = datetime.datetime.now()
+            nowDateGap = nowDate + timedelta(days=nHari)
+            y1 = int(nowDate.year)
+            m1 = int(nowDate.month)
+            d1 = int(nowDate.day)
+            y2 = int(nowDateGap.year)
+            m2 = int(nowDateGap.month)
+            d2 = int(nowDateGap.day)
+            dt1 = datetime.datetime(y1,m1,d1)
+            dt2 = datetime.datetime(y2,m2,d2)
+            n = len(dbReminder)
+            result = []
+            for i in range (n):
+                currentYear = int(dbReminder[i][1][6:10])
+                currentMonth = int(dbReminder[i][1][3:5])
+                currentDay = int(dbReminder[i][1][0:2])
+                currentdt = datetime.datetime(currentYear, currentMonth, currentDay)
+                if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3]):
+                    # print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
+                    result.append(dbReminder[i])
+            return result
+        else :
+            nHari = int(textToAngka(matchN[0]))*7
+            nowDate = datetime.datetime.now()
+            nowDateGap = nowDate + timedelta(days=nHari)
+            y1 = int(nowDate.year)
+            m1 = int(nowDate.month)
+            d1 = int(nowDate.day)
+            y2 = int(nowDateGap.year)
+            m2 = int(nowDateGap.month)
+            d2 = int(nowDateGap.day)
+            dt1 = datetime.datetime(y1,m1,d1)
+            dt2 = datetime.datetime(y2,m2,d2)
+            n = len(dbReminder)
+            result = []
+            for i in range (n):
+                currentYear = int(dbReminder[i][1][6:10])
+                currentMonth = int(dbReminder[i][1][3:5])
+                currentDay = int(dbReminder[i][1][0:2])
+                currentdt = datetime.datetime(currentYear, currentMonth, currentDay)
+                if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3]):
+                    print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
+                    result.append(dbReminder[i])
+            return result
+    elif (idxTipePeriode == 3):
+        textSource = inputText
+        patternN = re.compile(r'(\w+)\shari ke depan',re.IGNORECASE)
+        matchN = patternN.findall(textSource)
+        print(matchN)
+        if (isNumber(matchN[0])):
+            nHari = int(matchN[0])
+            nowDate = datetime.datetime.now()
+            nowDateGap = nowDate + timedelta(days=nHari)
+            y1 = int(nowDate.year)
+            m1 = int(nowDate.month)
+            d1 = int(nowDate.day)
+            y2 = int(nowDateGap.year)
+            m2 = int(nowDateGap.month)
+            d2 = int(nowDateGap.day)
+            dt1 = datetime.datetime(y1,m1,d1)
+            dt2 = datetime.datetime(y2,m2,d2)
+            n = len(dbReminder)
+            result = []
+            for i in range (n):
+                currentYear = int(dbReminder[i][1][6:10])
+                currentMonth = int(dbReminder[i][1][3:5])
+                currentDay = int(dbReminder[i][1][0:2])
+                currentdt = datetime.datetime(currentYear, currentMonth, currentDay)
+                if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3]):
+                    print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
+                    result.append(dbReminder[i])
+            return result
+        else :
+            nHari = int(textToAngka(matchN[0]))
+            nowDate = datetime.datetime.now()
+            nowDateGap = nowDate + timedelta(days=nHari)
+            y1 = int(nowDate.year)
+            m1 = int(nowDate.month)
+            d1 = int(nowDate.day)
+            y2 = int(nowDateGap.year)
+            m2 = int(nowDateGap.month)
+            d2 = int(nowDateGap.day)
+            dt1 = datetime.datetime(y1,m1,d1)
+            dt2 = datetime.datetime(y2,m2,d2)
+            n = len(dbReminder)
+            result = []
+            for i in range (n):
+                currentYear = int(dbReminder[i][1][6:10])
+                currentMonth = int(dbReminder[i][1][3:5])
+                currentDay = int(dbReminder[i][1][0:2])
+                currentdt = datetime.datetime(currentYear, currentMonth, currentDay)
+                if ((dt1 < currentdt and currentdt < dt2) and tipeTask == dbReminder[i][3]):
+                    print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
+                    result.append(dbReminder[i])
+            return result
+    elif (idxTipePeriode == 4):
+        nowDate = datetime.datetime.now()
+        y1 = int(nowDate.year)
+        m1 = int(nowDate.month)
+        d1 = int(nowDate.day)
+        dt1 = datetime.datetime(y1,m1,d1)
+        n = len(dbReminder)
+        result = []
+        for i in range (n):
+            currentYear = int(dbReminder[i][1][6:10])
+            currentMonth = int(dbReminder[i][1][3:5])
+            currentDay = int(dbReminder[i][1][0:2])
+            currentdt = datetime.datetime(currentYear, currentMonth, currentDay)
+            if ((dt1 == currentdt) and tipeTask == dbReminder[i][3]):
+                print("(ID:{0}) {1}-{2}-{3}-{4}".format(dbReminder[i][0],dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]))
+                result.append(dbReminder[i])
+        return result
+    elif (idxTipePeriode == 5):
+        return showAllTaskWithType(tipeTask)
 
 
 # Fungsi 3
-def showDeadlines(inputText):
+def showTaskDeadlines(inputText):
     global dbReminder
     # Nama matkul
     # Format matkul : XXYYYY, IF2211, if2211
@@ -352,6 +550,8 @@ def markTask(inputText):
         else :
             return ("Task {0} tidak ditemukan untuk diperabarui statusnya".format(NamaID))
 
+
+
 # file1 = open("KataPenting.txt","r+")
 # KataPenting = file1.read().splitlines()
 # file1.close()
@@ -368,24 +568,32 @@ print("Fungsi 2-Show all task")
 resultAll = showAllTask()
 print(resultAll)
 
-# result = periodeTask("Deadline hari ini apa saja")
-# print(result)
+print("Apa saja deadline yang dimiliki sejauh ini")
+resultPT = periodeTask("Apa saja deadline yang dimiliki sejauh ini")
+print(resultPT)
+
+print("3 minggu ke depan ada kuis apa saja")
+resultPTType = periodeTaskWithTaskType ("3 minggu ke depan ada kuis apa saja")
+# print(resultPTType)
 # print(datetime.datetime.now().year )
 # print(textToAngka("tiga"))
 
-# print("Show deadlines")
-# resultSD = showDeadlines("Deadline tugas IF2211 itu kapan")
+print("Show deadlines")
+resultSD = showTaskDeadlines("Deadline tugas IF2211 itu kapan")
+print(resultSD)
 
-# print("RENEW DEadline")
-# resultRD = renewDeadline("Deadline task 1 diundur menjadi 28/04/2021")
-# print(resultRD)
-# print(dbReminder)
+print("RENEW DEadline")
+resultRD = renewDeadline("Deadline task 1 diundur menjadi 28/04/2021")
+print(resultRD)
+print(dbReminder)
 
-# print("Markselesai")
-# resultMS = markTask("Saya sudah selesai mengerjakan task 1")
-# print(resultMS)
+print("Markselesai")
+resultMS = markTask("Saya sudah selesai mengerjakan task 1")
+print(resultMS)
 
-# print(dbReminder)
+print(dbReminder)
 
 # print(normalizeDatePattern("14 April 2021"))
 # print(findQueueMonth("april"))
+# print("IsNumber")
+# print(isNumber("empat"))
