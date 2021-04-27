@@ -118,6 +118,9 @@ h3 {
     border-radius: 10px;
 
 }
+.userText::after {
+    content: url(char.png);
+}
 
 .botText:before {
     content: url(avatar.png);
