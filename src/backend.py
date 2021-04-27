@@ -10,7 +10,7 @@ dbReminder = []
 listAngka = ["Nol","Satu","Dua","Tiga","Empat","Lima","Enam","Tujuh","Delapan","Sembilan"]
 listBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
 periodeWaktu = ["antara", "sampai", "minggu ke depan","hari ke depan","hari ini","sejauh ini"]
-listKeywords = ["Tambah","Apa saja","Kapan","Diundur","Selesai","Help","Apa yang bisa assistant lakukan"]
+listKeywords = ["Tambah","Apa saja","Kapan","Diundur","Selesai","Help","Apa yang bisa assistant lakukan","Chatan YUK"]
 
 def findQueueMonth(bulan):
     n = len(listBulan)
@@ -76,6 +76,7 @@ def writeDatabase(sourceFile):
 
 def readDatabase(sourceFile):
     global dbReminder
+    dbReminder = []
     resultRead = readFileTXT(sourceFile)
     for result in resultRead:
         currentResult = result.split(',')
@@ -210,8 +211,7 @@ def showAllTask():
     # print("[Daftar Deadline]")
     for i in range (n):
         if (dbReminder[i][5]==0):
-            currentID = "ID:" + str(dbReminder[i][0])
-            result.append([currentID, dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]])
+            result.append(dbReminder[i])
     return resultToString(result)
 
 # Berdasarkan periode waktu
@@ -349,8 +349,7 @@ def showAllTaskWithType(tipeTask):
     # print("[Daftar Deadline]")
     for i in range (n):
         if (dbReminder[i][5]==0 and tipeTask==dbReminder[i][3]):
-            currentID = "ID:" + str(dbReminder[i][0])
-            result.append([currentID, dbReminder[i][1],dbReminder[i][2],dbReminder[i][3],dbReminder[i][4]])
+            result.append(dbReminder[i])
     return resultToString(result)
 
 def periodeTaskWithTaskType(inputText):
@@ -537,6 +536,7 @@ def renewDeadline(inputText):
             dbReminder[i][1] = newTanggalReminder
             operationValidity = True
     if (operationValidity):
+        writeDatabase(namaDatabase)
         return ("Deadline task {0} telah diperbarui".format(NamaID))
     else :
         return ("Task {0} tidak ditemukan untuk diperbarui jadwalnya".format(NamaID))
@@ -560,7 +560,8 @@ def markTask(inputText):
                 operationValidity = True
         if (operationValidity):
             print(dbReminder)
-            return ("Status Task {0} telah diperbarui, Selamat anda telah selesai mengerjakan task tersebut".format(NamaID))
+            writeDatabase(namaDatabase)
+            return ("Status Task {0} telah diperbarui,</span></p><p class=\"botText\"><span>Selamat anda telah selesai mengerjakan task tersebut".format(NamaID))
         else :
             return ("Task {0} tidak ditemukan untuk diperabarui statusnya".format(NamaID))
 
@@ -569,7 +570,7 @@ def main(inputText):
     global dbReminder
     readDatabase("database.txt")
     KataPenting =  readFileTXT("KataPenting.txt")
-    command = [False, False, False, False, False, False]
+    command = [False, False, False, False, False, False, False]
     # Cek apakah memenuhi fungsi addReminder
     date = findDate(inputText)
     NamaMatkul = findMatkul(inputText)
@@ -590,6 +591,8 @@ def main(inputText):
                 command[i] = True
             elif (i>=5 and i<=6) :
                 command[5] = True
+            elif (i == 7):
+                command[6] = True
         i = i + 1
     print(listKey)
     print(command)
@@ -601,11 +604,11 @@ def main(inputText):
         else:
             nFalse = nFalse + 1
     if (nTrue>1):
-        print("Masukan Salah")
-        return ("Masukan Salah")
-    elif (nFalse == 6):
-        print("Masukan Salah")
-        return ("Masukan Salah")
+        print("Maaf, pesan tidak dikenali")
+        return ("Maaf, pesan tidak dikenali")
+    elif (nFalse == 7):
+        print("Maaf, pesan tidak dikenali")
+        return ("Maaf, pesan tidak dikenali")
     else:
         if (command[0] == True):
             return(addReminder(inputText))
@@ -618,15 +621,29 @@ def main(inputText):
         elif (command[4] == True):
             return (markTask(inputText))
         elif (command[5] == True):
-            return ("Help")
+            Help = "[Fitur]"
+            Help += "</span></p><p class=\"botText\"><span>1. Menambahkan task baru"
+            Help += "</span></p><p class=\"botText\"><span>2. Melihat daftar task"
+            Help += "</span></p><p class=\"botText\"><span>3. Menampilkan deadline dari task"
+            Help += "</span></p><p class=\"botText\"><span>4. Memperbarui task tertentu"
+            Help += "</span></p><p class=\"botText\"><span>5. Menandai task sudah selesai dikerjakan"
+            Help += "</span></p><p class=\"botText\"><span>[Daftar kata penting]"
+            Help += "</span></p><p class=\"botText\"><span>1. Kuis"
+            Help += "</span></p><p class=\"botText\"><span>2. Ujian"
+            Help += "</span></p><p class=\"botText\"><span>3. Tucil"
+            Help += "</span></p><p class=\"botText\"><span>4. Tubes"
+            Help += "</span></p><p class=\"botText\"><span>5. Praktikum"
+            return (Help)
+        elif (command[6] == True) :
+            return "YUK!"
 
 
-KataPenting =  readFileTXT("KataPenting.txt")
-print(KataPenting)
-contohinput = "Tubes IF2299 String Matching pada 14/02/2021"
-print("Read database......")
-readDatabase("database.txt")
-print(dbReminder)
+# KataPenting =  readFileTXT("KataPenting.txt")
+# print(KataPenting)
+# contohinput = "Tubes IF2299 String Matching pada 14/02/2021"
+# print("Read database......")
+# readDatabase("database.txt")
+# print(dbReminder)
 # writeDatabase("database.txt")
 
 # # Fungsi 1 - add reminder
