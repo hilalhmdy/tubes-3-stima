@@ -42,7 +42,7 @@ cd src
 python app.py
 ```
 - kemudian akan muncul running applikasi lokal
-```
+``
 Running on [http://127.0.0.1:5000/]([http://127.0.0.1:5000/) 
 ```
 - atau bisa melalui pranala
@@ -65,4 +65,3 @@ chatbot : [TASK BERHASIL DICATAT] (ID:1) 28/04/2021-IF2211-Tubes-String Matching
 - [M. Hilal Alhamdy (13519024)](https://github.com/hilalhmdy)
 - [Mohammad  Yahya Ibrahim (13519091)](https://github.com/ibrahimyahyaa)
 - [Habibina Arif Muzayyan (13519125)](https://github.com/habibinaarif)
-
