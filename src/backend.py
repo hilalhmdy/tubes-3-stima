@@ -200,6 +200,7 @@ def addReminder(input):
     # # Check if the parameters are complete
     # if (tipeReminder == '' or not matchMatkul or not matchTanggal or not matchTopik):
     #     return ("Maaf, parameter/atribut masukan masih kurang")
+    
     # Check if task already exists
     for i in range (len(dbReminder)):
         if (dbReminder[i][1]==TanggalReminder and dbReminder[i][2]==NamaMatkul and dbReminder[i][3] == tipeReminder and dbReminder[i][4]==namaTopik):
