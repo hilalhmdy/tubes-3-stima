@@ -45,6 +45,10 @@ python app.py
 ```
 Running on http://127.0.0.1:5000/ 
 ```
+- atau bisa melalui pranala
+```
+habibinaarif.pythonanywhere.com 
+```
 - Buka link tersebut di browser dan program siap digunakan
 
 ## Cara penggunaan aplikasi
