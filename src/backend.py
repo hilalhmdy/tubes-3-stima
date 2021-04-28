@@ -225,6 +225,9 @@ def periodeTask(inputText):
         # Mendapatkan 2 Tanggal
         # Format tanggal : 14/02/2021 ATAU 14-02-2021 ATAU 14 April 2021
         matchTanggal = findDate(inputText)
+        # Check apakah ada 2 parameter tanggal/date
+        if(len(matchTanggal)!=2):
+            return ("Maaf, jumlah argumen tanggal harus berjumlah 2")
         normalPatternTanggal = []
         for i in range (len(matchTanggal)):
             normalPatternTanggal.append(normalizeDatePattern(matchTanggal[i]))
@@ -368,6 +371,9 @@ def periodeTaskWithTaskType(inputText):
         # Mendapatkan 2 Tanggal
         # Format tanggal : 14/02/2021 ATAU 14-02-2021 ATAU 14 April 2021
         matchTanggal = findDate(inputText)
+        # Check apakah ada 2 parameter tanggal/date
+        if(len(matchTanggal)!=2):
+            return ("Maaf, jumlah argumen tanggal harus berjumlah 2")
         normalPatternTanggal = []
         for i in range (len(matchTanggal)):
             normalPatternTanggal.append(normalizeDatePattern(matchTanggal[i]))
@@ -527,6 +533,9 @@ def renewDeadline(inputText):
     # Format tanggal : 14/02/2021 ATAU 14-02-2021 ATAU 14 April 2021
     patternTanggal = re.compile(r'[0-9]{2}[/-]?\s?\w+[/-]?\s?[0-9]{4}')
     matchTanggal = patternTanggal.findall(inputText)
+    # Check apakah ada 1 parameter tanggal/date
+    if(len(matchTanggal)!=1):
+        return ("Maaf, jumlah argumen tanggal harus berjumlah 1")
     newTanggalReminder = matchTanggal[0]
     newTanggalReminder = normalizeDatePattern(newTanggalReminder)
     print(newTanggalReminder)
@@ -658,7 +667,7 @@ def main(inputText):
 # print(resultAll)
 
 # print("\nApa saja deadline antara 10/02/2021 sampai 10/04/2021")
-# resultAntara = periodeTask("Apa saja deadline antara 10/02/2021 sampai 10/04/2021")
+# resultAntara = periodeTask("Apa saja deadline antara 10/02/2021 sampai")
 # print(resultAntara)
 
 # print("\n3 minggu ke depan ada kuis apa saja")
