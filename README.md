@@ -43,11 +43,11 @@ python app.py
 ```
 - kemudian akan muncul running applikasi lokal
 ```
-Running on http://127.0.0.1:5000/ 
+Running on [http://127.0.0.1:5000/]([http://127.0.0.1:5000/) 
 ```
 - atau bisa melalui pranala
 ```
-habibinaarif.pythonanywhere.com 
+[habibinaarif.pythonanywhere.com](habibinaarif.pythonanywhere.com)
 ```
 - Buka link tersebut di browser dan program siap digunakan
 
