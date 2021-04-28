@@ -175,20 +175,31 @@ def addReminder(input):
     # Jenis reminder
     tipeReminder = findTipeReminder(input)
     print("Tipe Reminder : " + tipeReminder)
+    if (tipeReminder == ''):
+        return ("Maaf, parameter/atribut masukan masih kurang")
     # Nama matkul
     # Format matkul : XXYYYY, IF2211, if2211
     matchMatkul = findMatkul(input)
+    if (not matchMatkul):
+        return ("Maaf, parameter/atribut masukan masih kurang")
     NamaMatkul = matchMatkul[0]
     print("Nama Matkul : " + NamaMatkul)
     # Tanggal
     # Format tanggal : 14/02/2021 ATAU 14-02-2021 ATAU 14 April 2021
     matchTanggal = findDate(input)
+    if (not matchTanggal):
+        return ("Maaf, parameter/atribut masukan masih kurang")
     TanggalReminder = normalizeDatePattern(matchTanggal[0])
     print("Date : " + TanggalReminder)
     # Topik (BELUM)
     matchTopik = findTopic(input)
+    if (not matchTopik):
+        return ("Maaf, parameter/atribut masukan masih kurang")
     namaTopik = matchTopik[0]
     print("Nama Topik : " + namaTopik)
+    # # Check if the parameters are complete
+    # if (tipeReminder == '' or not matchMatkul or not matchTanggal or not matchTopik):
+    #     return ("Maaf, parameter/atribut masukan masih kurang")
     # Check if task already exists
     for i in range (len(dbReminder)):
         if (dbReminder[i][1]==TanggalReminder and dbReminder[i][2]==NamaMatkul and dbReminder[i][3] == tipeReminder and dbReminder[i][4]==namaTopik):
@@ -655,9 +666,9 @@ def main(inputText):
 # print(dbReminder)
 # writeDatabase("database.txt")
 
-# # Fungsi 1 - add reminder
+# Fungsi 1 - add reminder
 # print("\nFungsi 1 - add reminder")
-# # addReminer(contohinput)
+# print(addReminder("Tubes IF2299 String Matching pada"))
 # print(dbReminder)
 
 # # Fungsi 2
