@@ -60,7 +60,7 @@ chatbot : [TASK BERHASIL DICATAT] (ID:1) 28/04/2021-IF2211-Tubes-String Matching
 
 ```
 ## Interface Frontend
-![ChatanYuk](https://github.com/hilalhmdy/tubes-3-stima/src/blob/main/img/ChatanYuk.png)
+![ChatanYuk](https://github.com/hilalhmdy/tubes-3-stima/blob/main/src/img/ChatanYuk.png)
 ## Author
 - [M. Hilal Alhamdy (13519024)](https://github.com/hilalhmdy)
 - [Mohammad  Yahya Ibrahim (13519091)](https://github.com/ibrahimyahyaa)
